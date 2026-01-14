@@ -19,6 +19,7 @@ turndown.addRule("strikethrough", {
 turndown.addRule("pre", {
   filter: "pre",
   replacement: (content, node) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const element = node as any; // Use any to access DOM properties
     const codeElement = element.querySelector?.("code");
     const language = codeElement?.className?.match(/language-(\w+)/)?.[1] || "";
@@ -63,7 +64,7 @@ export function htmlToMarkdown(html: string): string {
   if (!html) return "";
 
   // Clean up common HTML issues
-  let cleaned = html
+  const cleaned = html
     // Remove zero-width spaces and other invisible characters
     .replace(/[\u200B-\u200D\uFEFF]/g, "")
     // Normalize line breaks
@@ -87,7 +88,7 @@ export function htmlToMarkdown(html: string): string {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    
+
     // If this is a blank line, check what comes next
     if (line.trim() === "") {
       // Look ahead to find next non-empty line
@@ -98,17 +99,18 @@ export function htmlToMarkdown(html: string): string {
           break;
         }
       }
-      
+
       // Skip blank line if next content is a list item
       if (listItemPattern.test(nextNonEmpty)) {
         continue;
       }
     }
-    
+
     cleanedLines.push(line);
   }
 
-  markdown = cleanedLines.join("\n")
+  markdown = cleanedLines
+    .join("\n")
     // Remove trailing whitespace from each line (but not newlines)
     .replace(/[ \t]+$/gm, "")
     // Collapse 3+ newlines to double newline (preserve paragraph breaks)

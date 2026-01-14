@@ -20,7 +20,10 @@ function delay(ms: number): Promise<void> {
 /**
  * Send keyboard shortcut via AppleScript
  */
-async function sendKeyboardShortcut(key: string, modifiers: string[]): Promise<void> {
+async function sendKeyboardShortcut(
+  key: string,
+  modifiers: string[],
+): Promise<void> {
   const modifierStr = modifiers.map((m) => `${m} down`).join(", ");
   const script = `
     tell application "System Events"
@@ -37,7 +40,7 @@ async function sendKeyboardShortcut(key: string, modifiers: string[]): Promise<v
 async function getSystemClipboardHtml(): Promise<string | null> {
   try {
     const { stdout } = await execAsync(
-      "osascript -e 'the clipboard as «class HTML»' 2>/dev/null | perl -pe 's/«data HTML(.*)»/$1/' | xxd -r -p"
+      "osascript -e 'the clipboard as «class HTML»' 2>/dev/null | perl -pe 's/«data HTML(.*)»/$1/' | xxd -r -p",
     );
     return stdout && stdout.trim() ? stdout : null;
   } catch {
@@ -60,7 +63,10 @@ export default async function Command() {
       }
     }
 
-    if ((!plainText || plainText.trim() === "") && (!html || html.trim() === "")) {
+    if (
+      (!plainText || plainText.trim() === "") &&
+      (!html || html.trim() === "")
+    ) {
       await showHUD("❌ Clipboard is empty");
       return;
     }
@@ -90,7 +96,7 @@ export default async function Command() {
 
     // Check if auto-format is enabled
     const preferences = getPreferenceValues<Preferences>();
-    
+
     if (preferences.autoFormat) {
       // Wait for paste to complete
       await delay(100);

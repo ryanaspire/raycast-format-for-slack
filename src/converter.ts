@@ -64,7 +64,10 @@ export function convertMarkdownToSlack(markdown: string): string {
   result = result.replace(/^>\s*/gm, "> ");
 
   // Step 11: Restore all placeholders
-  result = result.replace(/\x00(CODE|BOLD)(\d+)\x00/g, (_, type, index) => store[parseInt(index)]);
+  result = result.replace(
+    /\x00(CODE|BOLD)(\d+)\x00/g, // eslint-disable-line no-control-regex
+    (_, type, index) => store[parseInt(index)],
+  );
 
   // Step 11.5: Strip bold formatting from headings (headings are already converted to *Heading* format)
   // Headings can contain bold text, which creates nested bold (*Heading with *bold* text*)
@@ -86,13 +89,13 @@ export function convertMarkdownToSlack(markdown: string): string {
     // Slack doesn't support nested formatting, so strip everything
     let cleaned = content;
     // Remove paired markers first
-    cleaned = cleaned.replace(/\*(.+?)\*/g, "$1");   // Remove *bold* (paired)
-    cleaned = cleaned.replace(/_(.+?)_/g, "$1");     // Remove _italic_ (paired)
-    cleaned = cleaned.replace(/~(.+?)~/g, "$1");     // Remove ~strikethrough~ (paired)
+    cleaned = cleaned.replace(/\*(.+?)\*/g, "$1"); // Remove *bold* (paired)
+    cleaned = cleaned.replace(/_(.+?)_/g, "$1"); // Remove _italic_ (paired)
+    cleaned = cleaned.replace(/~(.+?)~/g, "$1"); // Remove ~strikethrough~ (paired)
     // Then remove any remaining unpaired markers
-    cleaned = cleaned.replace(/\*/g, "");             // Remove any remaining *
-    cleaned = cleaned.replace(/_/g, "");             // Remove any remaining _
-    cleaned = cleaned.replace(/~/g, "");             // Remove any remaining ~
+    cleaned = cleaned.replace(/\*/g, ""); // Remove any remaining *
+    cleaned = cleaned.replace(/_/g, ""); // Remove any remaining _
+    cleaned = cleaned.replace(/~/g, ""); // Remove any remaining ~
     return "> " + cleaned;
   });
   return result;

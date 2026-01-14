@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "paste-as-slack-mrkdwn",
-  "title": "Paste as Slack mrkdwn",
+  "title": "Paste as Slack Mrkdwn",
   "description": "Paste Markdown or rich text into Slack with proper formatting. Works great with content from ChatGPT, Notion, and other apps.",
   "icon": "icon.png",
   "author": "ryananderson",
@@ -12,7 +12,7 @@
   "commands": [
     {
       "name": "paste-as-slack-mrkdwn",
-      "title": "Paste as Slack mrkdwn",
+      "title": "Paste as Slack Mrkdwn",
       "description": "Converts rich text or Markdown on the clipboard to Slack mrkdwn, pastes it and tells Slack to apply formatting.",
       "mode": "no-view"
     }
@@ -20,6 +20,7 @@
   "preferences": [
     {
       "name": "autoFormat",
+      "label": "Auto-format in Slack",
       "title": "Auto-format in Slack",
       "description": "Automatically apply Slack's formatting shortcut (Cmd+Shift+F) after pasting",
       "type": "checkbox",
