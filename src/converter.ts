@@ -85,17 +85,11 @@ export function convertMarkdownToSlack(markdown: string): string {
   // Users can manually format via UI after pasting if needed
   // This must happen after placeholders are restored so we catch the final *text* format
   result = result.replace(/^>\s*(.*)$/gm, (match, content) => {
-    // Remove ALL formatting markers from blockquote lines (paired or unpaired)
-    // Slack doesn't support nested formatting, so strip everything
+    // Remove paired formatting markers only - unpaired ones may be content (snake_case, ~/paths)
     let cleaned = content;
-    // Remove paired markers first
-    cleaned = cleaned.replace(/\*(.+?)\*/g, "$1"); // Remove *bold* (paired)
-    cleaned = cleaned.replace(/_(.+?)_/g, "$1"); // Remove _italic_ (paired)
-    cleaned = cleaned.replace(/~(.+?)~/g, "$1"); // Remove ~strikethrough~ (paired)
-    // Then remove any remaining unpaired markers
-    cleaned = cleaned.replace(/\*/g, ""); // Remove any remaining *
-    cleaned = cleaned.replace(/_/g, ""); // Remove any remaining _
-    cleaned = cleaned.replace(/~/g, ""); // Remove any remaining ~
+    cleaned = cleaned.replace(/\*([^\*]+)\*/g, "$1"); // Remove *bold*
+    cleaned = cleaned.replace(/_([^_]+)_/g, "$1"); // Remove _italic_
+    cleaned = cleaned.replace(/~([^~]+)~/g, "$1"); // Remove ~strikethrough~
     return "> " + cleaned;
   });
   return result;
