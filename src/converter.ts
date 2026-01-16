@@ -87,7 +87,7 @@ export function convertMarkdownToSlack(markdown: string): string {
   result = result.replace(/^>\s*(.*)$/gm, (match, content) => {
     // Remove paired formatting markers only - unpaired ones may be content (snake_case, ~/paths)
     let cleaned = content;
-    cleaned = cleaned.replace(/\*([^\*]+)\*/g, "$1"); // Remove *bold*
+    cleaned = cleaned.replace(/\*([^*]+)\*/g, "$1"); // Remove *bold*
     cleaned = cleaned.replace(/_([^_]+)_/g, "$1"); // Remove _italic_
     cleaned = cleaned.replace(/~([^~]+)~/g, "$1"); // Remove ~strikethrough~
     return "> " + cleaned;
